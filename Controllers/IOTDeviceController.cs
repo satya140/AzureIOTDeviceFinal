@@ -9,20 +9,22 @@ namespace AzureIOTDevice.Controllers
     public class IOTDeviceController : ControllerBase
     {
 
-        private readonly string _connectionString = "HostName=iothub23rdjune.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=LTK2d+c/RHurWEoEz5L0oPC55yEn1Jsj1/0PGxZ2qO8=";
-       // private readonly string _deviceId = "deviceid-01";
-
-        private readonly ManageDevice manageDevice;
-
-        public IOTDeviceController()
+        private readonly string _connectionString;
+        private readonly ManageDevice _manageDevice;
+        private readonly IConfiguration _configuration;
+      
+        public IOTDeviceController(IConfiguration configuration)
         {
-            manageDevice = new ManageDevice();
+           _configuration = configuration;
+           _connectionString = _configuration.GetConnectionString("IOTDeviceConnection");
+            _manageDevice = new ManageDevice();
         }
+
         // GET: api/<IOTDeviceController>
         [HttpGet("GetAllDeviceList")]
         public async Task<IActionResult> GetAllDeviceList()
         {
-            return Ok(await manageDevice.GetDeviceListAsync(_connectionString));
+            return Ok(await _manageDevice.GetDeviceListAsync(_connectionString));
         }
 
         //// GET api/<IOTDeviceController>/5
@@ -36,14 +38,14 @@ namespace AzureIOTDevice.Controllers
         [HttpPost("CreateDevice")]
         public async Task<IActionResult> CreateDevice( string deviceId)
         {
-           return Ok(await manageDevice.CreateDeviceAsync(_connectionString, deviceId));
+           return Ok(await _manageDevice.CreateDeviceAsync(_connectionString, deviceId));
         }
 
         // PUT api/<IOTDeviceController>/5
         [HttpPut("UpdatedesiredProperties")]
         public async Task<IActionResult> UpdatedesiredProperties(string deviceid)
         {
-            return Ok(await manageDevice.UpdateDesiredPropertiesAsync(_connectionString, deviceid));
+            return Ok(await _manageDevice.UpdateDesiredPropertiesAsync(_connectionString, deviceid));
         }
 
 
@@ -51,21 +53,21 @@ namespace AzureIOTDevice.Controllers
         [HttpPut("UpdateReportedProperties")]
         public async Task<IActionResult> UpdateReportedProperties(string deviceid)
         {
-            return Ok(await manageDevice.UpdateReportedPropertiesAsync(_connectionString, deviceid));
+            return Ok(await _manageDevice.UpdateReportedPropertiesAsync(_connectionString, deviceid));
         }
 
         // DELETE api/<IOTDeviceController>/5
         [HttpDelete("DeleteDevice")]
         public async Task<IActionResult> DeleteDevice(string deviceid)
         {
-            return Ok(await manageDevice.DeleteDeviceAsync(_connectionString, deviceid));
+            return Ok(await _manageDevice.DeleteDeviceAsync(_connectionString, deviceid));
         }
 
 
         [HttpPost("Sendtelemetry")]
         public async Task<IActionResult> SendTelemetry(string deviceid)
         {
-            return Ok(await manageDevice.SendDeviceTocloudMessageAsync(_connectionString, deviceid));
+            return Ok(await _manageDevice.SendDeviceTocloudMessageAsync(_connectionString, deviceid));
         }
     }
 }

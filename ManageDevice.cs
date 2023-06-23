@@ -14,14 +14,6 @@ namespace AzureIOTDevice
 {
     public class ManageDevice
     {
-        
-        public ManageDevice()
-        {
-            //_configuration = configuration;
-            //_connectionString = "HostName=iothub23rdjune.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=LTK2d+c/RHurWEoEz5L0oPC55yEn1Jsj1/0PGxZ2qO8=";
-
-        }
-
         public async Task<string> CreateDeviceAsync(string connectionString, string deviceId)
         {
             // Create a new instance of the RegistryManager using the IoT Hub connection string
@@ -36,7 +28,7 @@ namespace AzureIOTDevice
                     //Console.WriteLine("Device already exists!");
                     //Console.WriteLine($"Reading Device twin: ");
 
-                    await GetDeviceTwinAsync(connectionString,deviceId);
+                    await GetDeviceTwinAsync(connectionString, deviceId);
                     return "Device already exists!"; ;
                 }
 
@@ -52,8 +44,7 @@ namespace AzureIOTDevice
                 {
                     Msg = "Device Created",
                     Id = device.Id,
-                    PrimaryKey = device.Authentication.SymmetricKey.PrimaryKey,
-                    SecondaryKey = device.Authentication.SymmetricKey.SecondaryKey
+                    PrimaryKey = device.Authentication.SymmetricKey.PrimaryKey
                 };
 
                 return JsonConvert.SerializeObject(deviceInfo);
@@ -66,7 +57,7 @@ namespace AzureIOTDevice
             }
             catch (Exception ex)
             {
-                return "Error creating device: {ex.Message}" +ex.Message;
+                return "Error creating device: {ex.Message}" + ex.Message;
             }
             finally
             {
@@ -74,7 +65,7 @@ namespace AzureIOTDevice
             }
         }
 
-        public async Task<string> GetDeviceTwinAsync(string connectionString,string deviceId)
+        public async Task<string> GetDeviceTwinAsync(string connectionString, string deviceId)
         {
 
             DeviceClient dClient = DeviceClient.CreateFromConnectionString(connectionString, deviceId);
@@ -119,7 +110,7 @@ namespace AzureIOTDevice
             try
             {
                 var devices = registryManager.CreateQuery("SELECT * FROM devices", 100);
-                
+
                 while (devices.HasMoreResults)
                 {
                     var page = await devices.GetNextAsTwinAsync();
@@ -135,7 +126,7 @@ namespace AzureIOTDevice
                         iotdevice.Add(twin.DeviceId);
                     }
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -149,7 +140,7 @@ namespace AzureIOTDevice
             return iotdevice;
         }
 
-        public async Task<string> DeleteDeviceAsync(string connectionString,string deviceId)
+        public async Task<string> DeleteDeviceAsync(string connectionString, string deviceId)
         {
             Console.WriteLine($"Deleting device - {deviceId}");
             RegistryManager registryManager = RegistryManager.CreateFromConnectionString(connectionString);
@@ -170,7 +161,7 @@ namespace AzureIOTDevice
             }
         }
 
-        public async Task<string> UpdateDesiredPropertiesAsync(string connectionString,string deviceId)
+        public async Task<string> UpdateDesiredPropertiesAsync(string connectionString, string deviceId)
         {
 
             RegistryManager registryManager = RegistryManager.CreateFromConnectionString(connectionString);
@@ -199,7 +190,7 @@ namespace AzureIOTDevice
             return message;
         }
 
-        public async Task<string> UpdateReportedPropertiesAsync(string connectionString,string deviceId)
+        public async Task<string> UpdateReportedPropertiesAsync(string connectionString, string deviceId)
         {
 
             RegistryManager registryManager = RegistryManager.CreateFromConnectionString(connectionString);
@@ -227,7 +218,7 @@ namespace AzureIOTDevice
             }
         }
 
-        public async Task<string> SendDeviceTocloudMessageAsync(string connectionString,string deviceId)
+        public async Task<string> SendDeviceTocloudMessageAsync(string connectionString, string deviceId)
         {
 
             // RegistryManager registryManager = RegistryManager.CreateFromConnectionString(connectionString);
