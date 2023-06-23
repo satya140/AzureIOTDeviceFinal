@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: azureiotdevice22ndjune 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azureiotdevice22ndjune
+  template:
+    metadata:
+      labels:
+        app: azureiotdevice22ndjune 
+    spec:
+      containers:
+        - name: azureiotdevice22ndjune 
+          image: container22ndjune.azurecr.io/azureiotdevice22ndjune
+          ports:
+          - containerPort: 80

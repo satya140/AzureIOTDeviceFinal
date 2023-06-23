@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: azureiotdevice22ndjune
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 80 
+    selector:
+        app: azureiotdevice22ndjune
